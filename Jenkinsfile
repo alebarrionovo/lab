@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    enviroment {
-                tag_version = "${env.BUILD_ID}"
-            }
-            
     stages {
 
         stage ('Build Docker Image') {
@@ -27,7 +23,9 @@ pipeline {
         }
 
         stage ('Deploy Kubernetes') {
-            
+            enviroment {
+                tag_version = "${env.BUILD_ID}"
+            }
             steps {             
                 withKubeConfig ([credentialsId: 'kubeconfig']) {
                     sh 'sed -i "s/{{TAG}}/$tag_version/g" k8s/deployment.yaml'
