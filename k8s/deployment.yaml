@@ -44,22 +44,18 @@ kind: Deployment
 metadata:
   name: web
 spec:
-  replicas: 10
+  replicas: 3
   selector:
     matchLabels:
       app: web
   template:
     metadata:
       labels:
-        app: web
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
-        prometheus.io/path: "/metrics"
+        app: web      
     spec:
       containers:
       - name: web
-        image: alebarrionovo/kube-news:{{TAG}}
+        image: alebarrionovo/kube-news:v1
         
         ports:
         - containerPort: 8080
@@ -85,4 +81,5 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
-  type: LoadBalancer
+    nodePort: 30000
+  type: NodePort
